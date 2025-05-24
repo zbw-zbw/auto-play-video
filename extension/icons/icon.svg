@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <circle cx="64" cy="64" r="60" fill="#2196F3"/>
+  
+  <!-- 播放三角形 -->
+  <path d="M48 40 L48 88 L88 64 Z" fill="white"/>
+  
+  <!-- 外圈装饰 -->
+  <circle cx="64" cy="64" r="60" fill="none" stroke="white" stroke-width="4" stroke-opacity="0.3"/>
+</svg> 
