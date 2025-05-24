@@ -145,6 +145,14 @@ function autoCompleteIfNeeded() {
     if (!settings.autoComplete) return;
     getCurrentWebTab(tab => {
       if (!tab) return;
+      try {
+        const url = new URL(tab.url);
+        const host = url.hostname;
+        const excluded = (settings.excludedSites || '').split(/\n|,/).map(s => s.trim()).filter(Boolean);
+        if (excluded.some(domain => host.endsWith(domain))) {
+          return; // 命中排除网站
+        }
+      } catch (e) {}
       chrome.tabs.sendMessage(tab.id, {action: 'completeVideos'}, function(response) {
         if (chrome.runtime.lastError) {
           showError('自动完成视频失败，请刷新页面后重试');
@@ -206,8 +214,13 @@ function saveSettings() {
       showError('保存设置失败，请稍后重试');
       return;
     }
-    console.log('Settings saved:', settings);
     setActiveSpeedOption(settings.defaultSpeed);
+    // 设置成功提示（只在settingsTip区域显示）
+    const tip = document.getElementById('settingsTip');
+    if (tip) {
+      tip.textContent = '设置已保存';
+      setTimeout(() => { tip.textContent = ''; }, 1200);
+    }
   });
 }
 

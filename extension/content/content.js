@@ -119,6 +119,7 @@ if (window.videoManagerInstance) {
     // 检查是否需要自动完成视频
     async checkAutoComplete(isSrcChanged = false) {
       try {
+        if (!chrome.storage || !chrome.storage.sync) return;
         const result = await chrome.storage.sync.get('settings');
         const settings = result.settings || { autoComplete: false };
         if (settings.autoComplete && this.videos.size > 0) {
@@ -142,7 +143,8 @@ if (window.videoManagerInstance) {
           }
         }
       } catch (error) {
-        console.error('Error checking auto complete:', error);
+        // 只输出友好提示，不输出详细报错
+        this.showTip && this.showTip('自动完成功能暂时不可用');
       }
     }
 
@@ -275,4 +277,37 @@ if (window.videoManagerInstance) {
       window.videoManagerInstance = null;
     }
   });
+}
+
+// 在VideoManager类外部添加友好提示方法
+// 插件风格右下角浮层
+if (!window.showPluginTip) {
+  window.showPluginTip = function(msg) {
+    let tip = document.getElementById('pluginTipFloat');
+    if (!tip) {
+      tip = document.createElement('div');
+      tip.id = 'pluginTipFloat';
+      tip.style.position = 'fixed';
+      tip.style.right = '24px';
+      tip.style.bottom = '32px';
+      tip.style.background = '#43a047';
+      tip.style.color = '#fff';
+      tip.style.padding = '10px 22px';
+      tip.style.borderRadius = '8px';
+      tip.style.fontSize = '15px';
+      tip.style.zIndex = 999999;
+      tip.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+      document.body.appendChild(tip);
+    }
+    tip.textContent = msg;
+    tip.style.display = 'block';
+    clearTimeout(window._pluginTipTimer);
+    window._pluginTipTimer = setTimeout(() => {
+      tip.style.display = 'none';
+    }, 1800);
+  }
+}
+// 绑定到VideoManager实例
+if (window.videoManagerInstance) {
+  window.videoManagerInstance.showTip = window.showPluginTip;
 } 

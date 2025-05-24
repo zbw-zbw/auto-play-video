@@ -50,7 +50,7 @@
         <label for="defaultSpeed">默认播放速度：</label>
         <select id="defaultSpeed">
           <option value="0.5">0.5x</option>
-          <option value="1">1x</option>
+          <option value="1" selected>1x</option>
           <option value="1.5">1.5x</option>
           <option value="2">2x</option>
           <option value="2.5">2.5x</option>
@@ -64,6 +64,7 @@
         <textarea id="excludedSites" rows="3" placeholder="例如: bilibili.com"></textarea>
       </div>
       <button id="saveSettings" class="control-button">保存设置</button>
+      <div id="settingsTip" style="color: #43a047; text-align: center; margin-top: 8px; font-size: 14px; min-height: 20px;"></div>
     </div>
   </div>
   <script src="popup.js"></script>
