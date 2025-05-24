@@ -23,6 +23,7 @@ function initPopup() {
   ensureContentScriptInjected().then(() => {
     updateVideoCount();
     loadSettings();
+    initTheme();
   });
 
   document.getElementById('completeButton').addEventListener('click', function() {
@@ -272,4 +273,37 @@ function showError(msg) {
   const videoCount = document.getElementById('videoCount');
   if (videoCount) videoCount.textContent = msg;
   // 不再输出详细错误日志
+}
+
+// 主题相关函数
+function initTheme() {
+  // 从存储中获取主题设置
+  chrome.storage.sync.get('theme', function(result) {
+    const theme = result.theme || 'light';
+    setTheme(theme);
+  });
+
+  // 添加主题切换按钮事件监听
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.addEventListener('click', function() {
+    chrome.storage.sync.get('theme', function(result) {
+      const currentTheme = result.theme || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      setTheme(newTheme);
+      chrome.storage.sync.set({theme: newTheme});
+    });
+  });
+}
+
+function setTheme(theme) {
+  const body = document.body;
+  const themeIcon = document.querySelector('.theme-icon');
+  
+  if (theme === 'dark') {
+    body.classList.add('dark-theme');
+    themeIcon.textContent = '☀️';
+  } else {
+    body.classList.remove('dark-theme');
+    themeIcon.textContent = '🌙';
+  }
 } 

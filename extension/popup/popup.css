@@ -293,4 +293,86 @@ h3 {
 
 #saveSettings:hover {
   background: #45a049;
+}
+
+/* 主题切换按钮样式 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.theme-icon {
+  font-size: 20px;
+}
+
+/* 暗色主题样式 */
+body.dark-theme {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+body.dark-theme .container {
+  background-color: #1a1a1a;
+}
+
+body.dark-theme h2,
+body.dark-theme h3 {
+  color: #ffffff;
+}
+
+body.dark-theme .video-info {
+  background: #2d2d2d;
+}
+
+body.dark-theme .video-info p {
+  color: #ffffff;
+}
+
+body.dark-theme .speed-option {
+  background: #2d2d2d;
+  border-color: #404040;
+  color: #ffffff;
+}
+
+body.dark-theme .speed-option:hover {
+  background: #404040;
+}
+
+body.dark-theme .speed-option.active {
+  background: #5a5a5a;
+  border-color: #6a6a6a;
+  color: #ffffff;
+}
+
+body.dark-theme .custom-speed input {
+  background: #2d2d2d;
+  border-color: #404040;
+  color: #ffffff;
+}
+
+body.dark-theme .settings-area {
+  background: #2d2d2d;
+}
+
+body.dark-theme .setting-item label {
+  color: #ffffff;
+}
+
+body.dark-theme .theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 } 
