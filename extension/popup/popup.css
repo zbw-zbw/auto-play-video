@@ -4,8 +4,8 @@ body {
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   min-width: 300px;
-  overflow-y: auto;
   overflow-x: hidden;
+  height: 100vh;
 }
 
 .container {
@@ -13,8 +13,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  height: 100vh;
+  flex-grow: 1;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 h2 {
@@ -375,4 +376,67 @@ body.dark-theme .setting-item label {
 
 body.dark-theme .theme-toggle:hover {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+.footer-links {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.footer-links a {
+  color: #666;
+  text-decoration: none;
+  margin: 0 5px;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: #4CAF50;
+}
+
+.footer-links span {
+  color: #666;
+}
+
+/* 暗色主题 */
+body.dark-theme .footer-links a,
+body.dark-theme .footer-links span {
+  color: #cccccc;
+}
+
+body.dark-theme .footer-links a:hover {
+  color: #76ff03; /* 暗色主题下的hover颜色 */
+}
+
+/* 自定义Toast样式 */
+.custom-toast {
+  visibility: hidden; /* 默认隐藏 */
+  min-width: 250px;
+  margin-left: -125px; /* 居中对齐 */
+  background-color: #333; /* 深色背景 */
+  color: #fff; /* 白色文字 */
+  text-align: center;
+  border-radius: 8px; /* 圆角 */
+  padding: 16px;
+  position: fixed; /* 固定位置 */
+  z-index: 1; /* 确保在其他内容之上 */
+  left: 50%;
+  top: 30px; /* 距离顶部30px */
+  font-size: 14px;
+  opacity: 0; /* 初始透明度 */
+  transition: opacity 0.3s, top 0.3s; /* 过渡效果 */
+}
+
+.custom-toast.show {
+  visibility: visible;
+  opacity: 1; /* 显示时完全不透明 */
+  top: 50px; /* 显示时向下移动 */
+}
+
+/* 暗色主题下Toast样式 */
+body.dark-theme .custom-toast {
+  background-color: #eeeeee; /* 暗色主题下使用浅色背景 */
+  color: #1a1a1a; /* 暗色主题下使用深色文字 */
 } 

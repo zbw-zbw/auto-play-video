@@ -38,7 +38,7 @@ function initPopup() {
           return;
         }
         if (response && response.success) {
-          // 可选：成功提示
+          showToast('视频已播放完成');
         }
       });
     });
@@ -59,7 +59,7 @@ function initPopup() {
     const customSpeedInput = document.getElementById('customSpeed');
     const rate = parseFloat(customSpeedInput.value);
     if (isNaN(rate) || rate < 0.1 || rate > 16) {
-      alert('请输入0.1到16之间的速度值');
+      showToast('请输入0.1到16之间的速度值', 2000);
       return;
     }
     setPlaybackRate(rate);
@@ -105,7 +105,7 @@ function ensureContentScriptInjected() {
           }).then(() => {
             resolve();
           }).catch(error => {
-            showError('内容脚本注入失败，请刷新页面后重试');
+            showToast('内容脚本注入失败，请刷新页面后重试', 3000);
             reject(error);
           });
         } else {
@@ -215,13 +215,7 @@ function saveSettings() {
       showError('保存设置失败，请稍后重试');
       return;
     }
-    setActiveSpeedOption(settings.defaultSpeed);
-    // 设置成功提示（只在settingsTip区域显示）
-    const tip = document.getElementById('settingsTip');
-    if (tip) {
-      tip.textContent = '设置已保存';
-      setTimeout(() => { tip.textContent = ''; }, 1200);
-    }
+    showToast('设置已保存');
   });
 }
 
@@ -253,16 +247,9 @@ function setPlaybackRate(rate) {
       }
       if (response && response.success) {
         setActiveSpeedOption(rate);
-        // 保存设置
-        chrome.storage.sync.get('settings', function(result) {
-          if (chrome.runtime.lastError) {
-            showError('获取设置失败，请稍后重试');
-            return;
-          }
-          const settings = result.settings || {};
-          settings.defaultSpeed = rate;
-          chrome.storage.sync.set({settings: settings});
-        });
+        showToast(`播放速度已设置为 ${rate}x`);
+      } else {
+        showError('设置播放速度失败');
       }
     });
   });
@@ -273,6 +260,20 @@ function showError(msg) {
   const videoCount = document.getElementById('videoCount');
   if (videoCount) videoCount.textContent = msg;
   // 不再输出详细错误日志
+  showToast(msg, 2000); // 错误信息也用toast显示，显示时间稍长
+}
+
+// 显示操作成功提示
+function showToast(msg, duration = 1500) { // 延长一点显示时间
+  const toast = document.getElementById('customToast');
+  if (toast) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, duration);
+  }
 }
 
 // 主题相关函数
