@@ -1,0 +1,53 @@
+# 依赖目录
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# 构建输出
+dist/
+build/
+*.zip
+
+# IDE 和编辑器文件
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# 环境变量和本地配置
+.env
+.env.local
+.env.*.local
+
+# 日志文件
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 测试覆盖率报告
+coverage/
+
+# 临时文件
+*.tmp
+*.temp
+.cache/
+
+# Chrome 扩展特定文件
+*.pem
+*.crx
+*.zip
+*.xpi
+
+# 其他
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

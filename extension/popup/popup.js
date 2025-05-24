@@ -33,11 +33,11 @@ function initPopup() {
       }
       chrome.tabs.sendMessage(tab.id, {action: 'completeVideos'}, function(response) {
         if (chrome.runtime.lastError) {
-          showError('一键完成视频失败: ' + chrome.runtime.lastError.message);
+          showError('一键完成视频失败，请刷新页面后重试');
           return;
         }
         if (response && response.success) {
-          console.log('Videos completed successfully');
+          // 可选：成功提示
         }
       });
     });
@@ -102,10 +102,9 @@ function ensureContentScriptInjected() {
             target: {tabId: tab.id},
             files: ['content/content.js']
           }).then(() => {
-            console.log('Content script injected successfully');
             resolve();
           }).catch(error => {
-            showError('内容脚本注入失败: ' + error.message);
+            showError('内容脚本注入失败，请刷新页面后重试');
             reject(error);
           });
         } else {
@@ -125,7 +124,7 @@ function updateVideoCount() {
     }
     chrome.tabs.sendMessage(tab.id, {action: 'getVideoCount'}, function(response) {
       if (chrome.runtime.lastError) {
-        showError('获取视频数量失败: ' + chrome.runtime.lastError.message);
+        showError('获取视频数量失败，请刷新页面后重试');
         return;
       }
       if (response && response.count !== undefined) {
@@ -148,11 +147,11 @@ function autoCompleteIfNeeded() {
       if (!tab) return;
       chrome.tabs.sendMessage(tab.id, {action: 'completeVideos'}, function(response) {
         if (chrome.runtime.lastError) {
-          showError('自动完成视频失败: ' + chrome.runtime.lastError.message);
+          showError('自动完成视频失败，请刷新页面后重试');
           return;
         }
         if (response && response.success) {
-          console.log('Videos auto-completed successfully');
+          // 可选：成功提示
         }
       });
     });
@@ -163,14 +162,26 @@ function autoCompleteIfNeeded() {
 function loadSettings() {
   chrome.storage.sync.get('settings', function(result) {
     if (chrome.runtime.lastError) {
-      showError('加载设置失败: ' + chrome.runtime.lastError.message);
+      showError('加载设置失败，请稍后重试');
       return;
     }
-    const settings = result.settings || { defaultSpeed: 1, autoComplete: false, excludedSites: '' };
+    // 确保默认值为 false
+    const settings = result.settings || { 
+      defaultSpeed: 1, 
+      autoComplete: false, 
+      excludedSites: '' 
+    };
     setActiveSpeedOption(settings.defaultSpeed);
     // 自动完成开关
     const autoCompleteToggle = document.getElementById('autoCompleteToggle');
-    if (autoCompleteToggle) autoCompleteToggle.checked = settings.autoComplete;
+    if (autoCompleteToggle) {
+      autoCompleteToggle.checked = settings.autoComplete;
+      // 添加事件监听器，当状态改变时保存设置
+      autoCompleteToggle.addEventListener('change', function() {
+        settings.autoComplete = this.checked;
+        chrome.storage.sync.set({settings});
+      });
+    }
     // 默认速度
     const defaultSpeed = document.getElementById('defaultSpeed');
     if (defaultSpeed) defaultSpeed.value = settings.defaultSpeed;
@@ -192,7 +203,7 @@ function saveSettings() {
   };
   chrome.storage.sync.set({settings}, function() {
     if (chrome.runtime.lastError) {
-      showError('保存设置失败: ' + chrome.runtime.lastError.message);
+      showError('保存设置失败，请稍后重试');
       return;
     }
     console.log('Settings saved:', settings);
@@ -223,7 +234,7 @@ function setPlaybackRate(rate) {
     }
     chrome.tabs.sendMessage(tab.id, {action: 'setPlaybackRate', rate: rate}, function(response) {
       if (chrome.runtime.lastError) {
-        showError('设置播放速度失败: ' + chrome.runtime.lastError.message);
+        showError('设置播放速度失败，请刷新页面后重试');
         return;
       }
       if (response && response.success) {
@@ -231,7 +242,7 @@ function setPlaybackRate(rate) {
         // 保存设置
         chrome.storage.sync.get('settings', function(result) {
           if (chrome.runtime.lastError) {
-            showError('获取设置失败: ' + chrome.runtime.lastError.message);
+            showError('获取设置失败，请稍后重试');
             return;
           }
           const settings = result.settings || {};
@@ -247,5 +258,5 @@ function setPlaybackRate(rate) {
 function showError(msg) {
   const videoCount = document.getElementById('videoCount');
   if (videoCount) videoCount.textContent = msg;
-  console.error(msg);
+  // 不再输出详细错误日志
 } 

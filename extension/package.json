@@ -1,0 +1,15 @@
+{
+  "name": "extension",
+  "version": "1.0.0",
+  "description": "> 一个支持自动完成网页视频播放的 Chrome 侧边栏扩展。",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "archiver": "^7.0.1"
+  }
+}
